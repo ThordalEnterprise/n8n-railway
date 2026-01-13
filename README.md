@@ -21,9 +21,13 @@ This project provides a minimal configuration to deploy n8n on Railway with:
 
 ```
 n8n-railway/
-├── Dockerfile       # Minimal Dockerfile using official n8n image
-├── env.example      # Template with all required environment variables
-└── README.md        # This file
+├── Dockerfile          # Minimal Dockerfile using official n8n image
+├── env.example         # Template with all required environment variables
+├── README.md           # This file
+├── CREDENTIALS.md      # Complete API keys and credentials setup guide
+└── workflows/          # Pre-built n8n workflows
+    ├── README.md       # Workflow documentation
+    └── tiktok-auto-story.json  # TikTok automation workflow
 ```
 
 ## Deployment Guide
@@ -319,6 +323,13 @@ This workflow requires the following FastAPI services deployed separately:
 5. **TikTok Upload Service** - TikTok API integration
 
 Each service should be deployed as a separate Railway service with GPU support where needed.
+
+**📋 API Keys Required:** See [CREDENTIALS.md](CREDENTIALS.md) for complete setup instructions including:
+- OpenAI API key
+- Reddit API credentials
+- TikTok API or S3 credentials
+- Voice generation (ElevenLabs/OpenAI/Coqui)
+- Video generation (RunPod/Replicate/Self-hosted)
 
 ## Additional Resources
 
