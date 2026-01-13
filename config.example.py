@@ -1,85 +1,91 @@
 """
-TikTok Auto Story Pipeline - Configuration Template
-Copy this file to config.py and fill in your API keys
+TikTok Auto Story Pipeline - FREE Open Source Configuration
+Uses ONLY free and open source tools - zero monthly costs!
+
+Copy this file to config.py and configure your Reddit API credentials
 """
 
 # ==============================================
-# CORE API KEYS
+# CORE API KEYS (FREE)
 # ==============================================
 
-# OpenAI API (Required for story generation)
-OPENAI_API_KEY = "sk-proj-xxxxxxxxxxxxxxxxxxxxx"
-
-# Reddit API (Required for story seeds)
+# Reddit API (100% FREE - get from reddit.com/prefs/apps)
 REDDIT_CLIENT_ID = "your_14_char_id"
 REDDIT_CLIENT_SECRET = "your_secret_key"
 REDDIT_USER_AGENT = "TikTokStoryBot/1.0"
 
 # ==============================================
-# TEXT-TO-SPEECH (Choose one)
+# STORY GENERATION (Choose one FREE option)
 # ==============================================
 
-# Option A: ElevenLabs (Best quality)
-ELEVENLABS_API_KEY = "your_elevenlabs_key"
-ELEVENLABS_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Default neutral voice
+# Option A: Ollama (100% FREE - Local LLM) ⭐ RECOMMENDED
+USE_OLLAMA = True
+OLLAMA_URL = "http://localhost:11434"
+OLLAMA_MODEL = "llama2"  # or "mistral", "codellama", "llama3"
 
-# Option B: OpenAI TTS (uses OPENAI_API_KEY above)
-USE_OPENAI_TTS = False  # Set to True to use OpenAI TTS instead
+# Option B: LM Studio (100% FREE - Alternative local LLM)
+USE_LM_STUDIO = False
+LM_STUDIO_URL = "http://localhost:1234"
 
-# Option C: Coqui TTS (Self-hosted, no key needed)
-USE_COQUI_TTS = False
+# Option C: GPT4All (100% FREE - Lightweight local models)
+USE_GPT4ALL = False
+GPT4ALL_MODEL_PATH = "/path/to/model.bin"
 
 # ==============================================
-# VIDEO GENERATION (Choose one)
+# TEXT-TO-SPEECH (100% FREE)
 # ==============================================
 
-# Option A: RunPod
-RUNPOD_API_KEY = "your_runpod_key"
-RUNPOD_ENDPOINT_ID = "your_endpoint_id"
-USE_RUNPOD = False
+# Option A: Coqui TTS (100% FREE - Best quality) ⭐ RECOMMENDED
+USE_COQUI_TTS = True
+COQUI_MODEL = "tts_models/en/ljspeech/tacotron2-DDC"
+# Other good models:
+# - tts_models/en/vctk/vits (multiple voices)
+# - tts_models/en/ljspeech/glow-tts
 
-# Option B: Replicate (Easiest to start)
-REPLICATE_API_TOKEN = "r8_xxxxxxxxxxxxxxxxxxxxx"
-USE_REPLICATE = True  # Default
+# Option B: pyttsx3 (100% FREE - Offline, built-in voices)
+USE_PYTTSX3 = False
+PYTTSX3_VOICE = "english"  # Uses system voices
 
-# Option C: Self-hosted ComfyUI
+# Option C: eSpeak (100% FREE - Lightweight)
+USE_ESPEAK = False
+
+# ==============================================
+# VIDEO GENERATION (100% FREE)
+# ==============================================
+
+# Option A: ComfyUI (100% FREE - Best quality) ⭐ RECOMMENDED
+USE_COMFYUI = True
 COMFYUI_URL = "http://localhost:8188"
-USE_COMFYUI = False
+# Requires GPU (12GB+ VRAM recommended)
+# Models needed (all FREE from HuggingFace):
+# - SDXL 1.0
+# - AnimateDiff
+
+# Option B: Stable Diffusion WebUI (100% FREE)
+USE_SDWEBUI = False
+SDWEBUI_URL = "http://localhost:7860"
+
+# Option C: Text2Video-Zero (100% FREE - Lighter on GPU)
+USE_TEXT2VIDEO = False
+TEXT2VIDEO_URL = "http://localhost:7861"
 
 # ==============================================
-# TIKTOK UPLOAD (Choose one)
+# VIDEO OUTPUT (100% FREE)
 # ==============================================
 
-# Option A: TikTok API (Requires approval)
-TIKTOK_CLIENT_KEY = "your_client_key"
-TIKTOK_CLIENT_SECRET = "your_client_secret"
-TIKTOK_ACCESS_TOKEN = "your_access_token"
-USE_TIKTOK_API = False
-
-# Option B: AWS S3 (For manual download)
-AWS_ACCESS_KEY_ID = "your_access_key"
-AWS_SECRET_ACCESS_KEY = "your_secret_key"
-AWS_S3_BUCKET = "tiktok-videos"
-AWS_REGION = "eu-west-1"
-USE_S3_UPLOAD = True  # Default - manual upload
-
-# Option C: Cloudflare R2 (Cheaper than S3)
-R2_ACCESS_KEY_ID = "your_access_key"
-R2_SECRET_ACCESS_KEY = "your_secret_key"
-R2_BUCKET_NAME = "tiktok-videos"
-R2_ACCOUNT_ID = "your_account_id"
-USE_R2_UPLOAD = False
+# Local File Storage (100% FREE) ⭐ RECOMMENDED
+LOCAL_OUTPUT_DIR = "/home/node/.n8n/videos"
+# Videos saved to n8n volume - download manually or via n8n
 
 # ==============================================
-# RAILWAY SERVICE URLS
+# SERVICE URLS
 # ==============================================
-# Update these after deploying services to Railway
+# Update these after deploying FREE services to Railway/your server
 
-STORY_SERVICE_URL = "http://localhost:8001"  # Change to Railway URL
-VOICE_SERVICE_URL = "http://localhost:8002"  # Change to Railway URL
-VIDEO_SERVICE_URL = "http://localhost:8003"  # Change to Railway URL
-ASSEMBLY_SERVICE_URL = "http://localhost:8004"  # Change to Railway URL
-TIKTOK_UPLOAD_SERVICE_URL = "http://localhost:8005"  # Change to Railway URL
+STORY_SERVICE_URL = "http://localhost:8001"
+VOICE_SERVICE_URL = "http://localhost:8002"
+VIDEO_SERVICE_URL = "http://localhost:8003"
+ASSEMBLY_SERVICE_URL = "http://localhost:8004"
 
 # ==============================================
 # STORY GENERATION SETTINGS
@@ -90,9 +96,9 @@ STORY_CONFIG = {
     "style": "dark absurd small town",
     "universe": "snowy small town",
     "twist_level": "high",
-    "subreddits": ["ShortStories", "creepypasta", "AskReddit", "nosleep"],
-    "gpt_model": "gpt-4",  # or "gpt-3.5-turbo" for cheaper
-    "temperature": 0.8
+    "subreddits": ["ShortStories", "creepypasta", "AskReddit", "nosleep", "LetsNotMeet"],
+    "temperature": 0.8,
+    "max_tokens": 500
 }
 
 # ==============================================
@@ -106,7 +112,10 @@ VIDEO_CONFIG = {
     "fps": 24,
     "resolution": [1080, 1920],  # 1080x1920 for TikTok
     "add_subtitles": True,
-    "subtitle_style": "modern"
+    "subtitle_style": "modern",
+    "subtitle_font": "Arial",
+    "subtitle_color": "white",
+    "subtitle_outline": "black"
 }
 
 # ==============================================
@@ -114,11 +123,11 @@ VIDEO_CONFIG = {
 # ==============================================
 
 VOICE_CONFIG = {
-    "voice": "neutral_us",  # or specific ElevenLabs voice ID
     "speed": 1.0,
     "pitch": 1.0,
     "add_background_music": False,
-    "background_music_volume": 0.2
+    "background_music_volume": 0.2,
+    "normalize_audio": True
 }
 
 # ==============================================
@@ -126,12 +135,9 @@ VOICE_CONFIG = {
 # ==============================================
 
 TIKTOK_CONFIG = {
-    "privacy_level": "public",  # or "private", "friends"
-    "hashtags": ["#story", "#shorts", "#mystical", "#darkstory", "#storytelling"],
+    "hashtags": ["#story", "#shorts", "#mystical", "#darkstory", "#storytelling", "#creepy"],
     "add_hook_as_caption": True,
-    "allow_comments": True,
-    "allow_duet": True,
-    "allow_stitch": True
+    "max_caption_length": 150
 }
 
 # ==============================================
@@ -148,45 +154,50 @@ SCHEDULE_CONFIG = {
 # HELPER FUNCTIONS
 # ==============================================
 
+def get_active_llm_provider():
+    """Returns the active LLM provider"""
+    if USE_OLLAMA:
+        return "ollama"
+    elif USE_LM_STUDIO:
+        return "lm_studio"
+    elif USE_GPT4ALL:
+        return "gpt4all"
+    else:
+        return "ollama"  # Default
+
 def get_active_tts_provider():
     """Returns the active TTS provider"""
-    if USE_OPENAI_TTS:
-        return "openai"
-    elif USE_COQUI_TTS:
+    if USE_COQUI_TTS:
         return "coqui"
+    elif USE_PYTTSX3:
+        return "pyttsx3"
+    elif USE_ESPEAK:
+        return "espeak"
     else:
-        return "elevenlabs"
+        return "coqui"  # Default
 
 def get_active_video_provider():
     """Returns the active video generation provider"""
-    if USE_RUNPOD:
-        return "runpod"
-    elif USE_COMFYUI:
+    if USE_COMFYUI:
         return "comfyui"
+    elif USE_SDWEBUI:
+        return "sdwebui"
+    elif USE_TEXT2VIDEO:
+        return "text2video"
     else:
-        return "replicate"
-
-def get_active_upload_provider():
-    """Returns the active upload provider"""
-    if USE_TIKTOK_API:
-        return "tiktok"
-    elif USE_R2_UPLOAD:
-        return "r2"
-    else:
-        return "s3"
+        return "comfyui"  # Default
 
 def get_all_config():
     """Returns all config as a dictionary"""
     return {
-        "openai_key": OPENAI_API_KEY,
         "reddit": {
             "client_id": REDDIT_CLIENT_ID,
             "client_secret": REDDIT_CLIENT_SECRET,
             "user_agent": REDDIT_USER_AGENT
         },
+        "llm_provider": get_active_llm_provider(),
         "tts_provider": get_active_tts_provider(),
         "video_provider": get_active_video_provider(),
-        "upload_provider": get_active_upload_provider(),
         "story": STORY_CONFIG,
         "video": VIDEO_CONFIG,
         "voice": VOICE_CONFIG,
@@ -196,9 +207,9 @@ def get_all_config():
             "story": STORY_SERVICE_URL,
             "voice": VOICE_SERVICE_URL,
             "video": VIDEO_SERVICE_URL,
-            "assembly": ASSEMBLY_SERVICE_URL,
-            "upload": TIKTOK_UPLOAD_SERVICE_URL
-        }
+            "assembly": ASSEMBLY_SERVICE_URL
+        },
+        "output_dir": LOCAL_OUTPUT_DIR
     }
 
 # ==============================================
@@ -206,37 +217,92 @@ def get_all_config():
 # ==============================================
 
 def validate_config():
-    """Validates that required keys are set"""
+    """Validates that required settings are configured"""
     errors = []
+    warnings = []
     
-    if OPENAI_API_KEY == "sk-proj-xxxxxxxxxxxxxxxxxxxxx":
-        errors.append("⚠️  OpenAI API key not set")
-    
+    # Reddit is the only required external API (and it's FREE!)
     if REDDIT_CLIENT_ID == "your_14_char_id":
         errors.append("⚠️  Reddit client ID not set")
+        errors.append("    Get it FREE from: https://www.reddit.com/prefs/apps")
     
-    if get_active_tts_provider() == "elevenlabs" and ELEVENLABS_API_KEY == "your_elevenlabs_key":
-        errors.append("⚠️  ElevenLabs API key not set")
+    # Check if at least one provider is enabled for each component
+    if not (USE_OLLAMA or USE_LM_STUDIO or USE_GPT4ALL):
+        warnings.append("💡 No LLM provider enabled - defaulting to Ollama")
     
-    if get_active_video_provider() == "replicate" and REPLICATE_API_TOKEN == "r8_xxxxxxxxxxxxxxxxxxxxx":
-        errors.append("⚠️  Replicate API token not set")
+    if not (USE_COQUI_TTS or USE_PYTTSX3 or USE_ESPEAK):
+        warnings.append("💡 No TTS provider enabled - defaulting to Coqui TTS")
+    
+    if not (USE_COMFYUI or USE_SDWEBUI or USE_TEXT2VIDEO):
+        warnings.append("💡 No video provider enabled - defaulting to ComfyUI")
     
     if errors:
         print("\n🔴 Configuration Errors:")
         for error in errors:
             print(error)
-        print("\n👉 Edit config.py and add your API keys\n")
+        print("\n👉 Edit config.py and add your Reddit API credentials\n")
         return False
     
+    if warnings:
+        print("\n💡 Configuration Warnings:")
+        for warning in warnings:
+            print(warning)
+        print()
+    
     print("✅ Configuration validated successfully!")
+    print("\n💚 100% FREE Open Source Stack:")
+    print(f"   ✓ LLM: {get_active_llm_provider()}")
+    print(f"   ✓ TTS: {get_active_tts_provider()}")
+    print(f"   ✓ Video: {get_active_video_provider()}")
+    print(f"   ✓ Storage: Local")
+    print(f"   ✓ Reddit: FREE API")
+    print("\n💰 Monthly Cost: $0.00")
+    print("🎉 You can generate unlimited videos for FREE!\n")
+    
     return True
+
+# ==============================================
+# INSTALLATION HELPERS
+# ==============================================
+
+def print_installation_guide():
+    """Prints installation instructions for free tools"""
+    print("\n📦 Installation Guide for FREE Tools")
+    print("=" * 50)
+    
+    print("\n1️⃣  Reddit API (100% FREE):")
+    print("   → https://www.reddit.com/prefs/apps")
+    print("   → Create app, select 'script', get Client ID & Secret")
+    
+    print("\n2️⃣  Ollama (Local LLM - FREE):")
+    print("   → curl -fsSL https://ollama.ai/install.sh | sh")
+    print("   → ollama pull llama2")
+    print("   → ollama serve")
+    
+    print("\n3️⃣  Coqui TTS (Voice - FREE):")
+    print("   → pip install TTS")
+    print("   → tts --list_models")
+    
+    print("\n4️⃣  ComfyUI (Video - FREE):")
+    print("   → git clone https://github.com/comfyanonymous/ComfyUI")
+    print("   → cd ComfyUI && pip install -r requirements.txt")
+    print("   → python main.py --listen 0.0.0.0 --port 8188")
+    
+    print("\n5️⃣  Download FREE models:")
+    print("   → SDXL: https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0")
+    print("   → AnimateDiff: https://huggingface.co/guoyww/animatediff")
+    
+    print("\n💡 All tools are 100% free and open source!")
+    print("=" * 50)
 
 if __name__ == "__main__":
     # Test configuration
-    print("🔧 TikTok Auto Story Pipeline - Configuration")
+    print("🔧 TikTok Auto Story Pipeline - FREE Configuration")
     print("=" * 50)
-    validate_config()
-    print("\n📊 Active providers:")
-    print(f"  TTS: {get_active_tts_provider()}")
-    print(f"  Video: {get_active_video_provider()}")
-    print(f"  Upload: {get_active_upload_provider()}")
+    
+    if validate_config():
+        print_installation_guide()
+    
+    print("\n📊 Active Configuration:")
+    import json
+    print(json.dumps(get_all_config(), indent=2))

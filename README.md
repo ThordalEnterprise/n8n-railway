@@ -12,17 +12,19 @@ This project provides a minimal configuration to deploy n8n on Railway with:
 - Secure configuration with environment variables
 - HTTPS support via Railway's automatic SSL
 
-### 💚 Free & Open Source Focus
+### 💚 100% FREE & Open Source
 
-This project prioritizes **100% free and open source tools** for content generation:
+This project uses **ONLY free and open source tools** - zero monthly costs:
 
-- ✅ **Coqui TTS** - Free voice generation
-- ✅ **ComfyUI + AnimateDiff** - Free video generation  
-- ✅ **Ollama (Optional)** - Free local LLM for stories
-- ✅ **Reddit API** - Free story seeds
-- ✅ **n8n** - Free workflow automation
+- ✅ **Ollama (Llama2)** - FREE local LLM for story generation
+- ✅ **Coqui TTS** - FREE voice generation
+- ✅ **ComfyUI + AnimateDiff** - FREE video generation
+- ✅ **Reddit API** - FREE story seeds
+- ✅ **n8n** - FREE workflow automation
+- ✅ **Local Storage** - FREE (Railway volume)
 
-**Total cost: $0-0.12/month** (see [FREE_SETUP.md](FREE_SETUP.md))
+**Monthly Cost: $0.00** 🎉  
+**Unlimited videos** with your own hardware!
 
 ## Prerequisites
 
@@ -339,17 +341,20 @@ This workflow requires the following FastAPI services deployed separately:
 
 Each service should be deployed as a separate Railway service with GPU support where needed.
 
-**📋 Easy Config Setup:** 
+**📋 Quick Config Setup (2 steps):**
 1. Copy `config.example.py` → `config.py`
-2. Add your API keys directly in config.py
-3. See [CONFIG_GUIDE.md](CONFIG_GUIDE.md) for quick 3-step setup
+2. Add **FREE** Reddit API credentials (get from reddit.com/prefs/apps)
+3. Done! Everything else is pre-configured for FREE tools
 
-**🔑 API Keys Required:** See [CREDENTIALS.md](CREDENTIALS.md) for where to get:
-- OpenAI API key
-- Reddit API credentials
-- TikTok API or S3 credentials
-- Voice generation (ElevenLabs/OpenAI/Coqui)
-- Video generation (RunPod/Replicate/Self-hosted)
+See [CONFIG_GUIDE.md](CONFIG_GUIDE.md) for installation guide.
+
+**🔑 Required (ALL FREE):**
+- ✅ Reddit API credentials (FREE - 2 minutes to get)
+- ✅ Ollama (FREE local LLM)
+- ✅ Coqui TTS (FREE voice)
+- ✅ ComfyUI (FREE video - needs GPU)
+
+No paid services required!
 
 ## Additional Resources
 
