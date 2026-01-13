@@ -1,0 +1,26 @@
+# Environment variables (never commit secrets!)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Railway
+.railway/
+
+# Temporary files
+*.tmp
+*.temp
