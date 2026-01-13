@@ -275,6 +275,51 @@ Railway pricing (as of 2026):
 
 Estimate your costs using Railway's pricing calculator.
 
+## Pre-built Workflows
+
+This repository includes ready-to-use workflows in the `workflows/` directory:
+
+### TikTok Auto Story + Video Pipeline
+
+**File:** `workflows/tiktok-auto-story.json`
+
+Automated TikTok content creation pipeline that:
+- ✅ Scrapes Reddit for story seeds (ShortStories, creepypasta, AskReddit)
+- ✅ Generates unique stories using OpenAI
+- ✅ Creates voice-over using TTS
+- ✅ Generates video clips with AnimateDiff + SDXL
+- ✅ Assembles final video with subtitles and hook
+- ✅ Posts to TikTok automatically
+
+**Runs:** Twice daily (10:00 and 18:00)
+
+#### How to Import
+
+1. Access your n8n instance at `https://your-app-name.up.railway.app`
+2. Click **"Workflows"** in the left sidebar
+3. Click **"Add Workflow"** → **"Import from File"**
+4. Select `workflows/tiktok-auto-story.json`
+5. Update the service URLs in each HTTP Request node:
+   - `story-service.up.railway.app` → Your story service URL
+   - `voice-service.up.railway.app` → Your voice service URL
+   - `video-service.up.railway.app` → Your video service URL
+   - `assembly-service.up.railway.app` → Your assembly service URL
+   - `tiktok-upload-service.up.railway.app` → Your TikTok upload service URL
+6. Configure credentials if needed (OpenAI API key, Reddit credentials, TikTok credentials)
+7. Activate the workflow
+
+#### Required External Services
+
+This workflow requires the following FastAPI services deployed separately:
+
+1. **Story Service** - Reddit scraping + OpenAI story generation
+2. **Voice Service** - Text-to-speech conversion
+3. **Video Service** - AnimateDiff + SDXL video generation
+4. **Assembly Service** - Video assembly with audio and subtitles
+5. **TikTok Upload Service** - TikTok API integration
+
+Each service should be deployed as a separate Railway service with GPU support where needed.
+
 ## Additional Resources
 
 - [n8n Documentation](https://docs.n8n.io)

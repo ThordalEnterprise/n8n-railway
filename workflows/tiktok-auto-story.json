@@ -1,0 +1,238 @@
+{
+  "name": "TikTok Auto Story + Video Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            },
+            {
+              "triggerAtHour": 18
+            }
+          ]
+        }
+      },
+      "id": "cron-trigger",
+      "name": "Cron Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://story-service.up.railway.app/generate-story",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"length_seconds\": 25,\n  \"style\": \"dark absurd small town\",\n  \"universe\": \"snowy small town\",\n  \"twist_level\": \"high\",\n  \"subreddits\": [\"ShortStories\", \"creepypasta\", \"AskReddit\"]\n}",
+        "options": {}
+      },
+      "id": "generate-story",
+      "name": "Generate Story",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 300],
+      "notes": "Calls FastAPI service to generate story from Reddit seeds + OpenAI"
+    },
+    {
+      "parameters": {
+        "url": "https://voice-service.up.railway.app/generate-voice",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ $json.story_text }},\n  \"voice\": \"neutral_us\"\n}",
+        "options": {}
+      },
+      "id": "generate-voice",
+      "name": "Generate Voice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [750, 200],
+      "notes": "Converts story text to voice audio (TTS)"
+    },
+    {
+      "parameters": {
+        "url": "https://video-service.up.railway.app/generate-video",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"visual_prompt\": {{ $json.visual_prompt }},\n  \"num_clips\": 5,\n  \"clip_duration\": 5,\n  \"aspect_ratio\": [9, 16]\n}",
+        "options": {}
+      },
+      "id": "generate-video",
+      "name": "Generate Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [750, 400],
+      "notes": "Generates video clips using AnimateDiff + SDXL from visual prompt"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "story-data",
+              "name": "story_text",
+              "value": "={{ $('Generate Story').item.json.story_text }}",
+              "type": "string"
+            },
+            {
+              "id": "hook-data",
+              "name": "hook",
+              "value": "={{ $('Generate Story').item.json.hook }}",
+              "type": "string"
+            },
+            {
+              "id": "visual-prompt",
+              "name": "visual_prompt",
+              "value": "={{ $('Generate Story').item.json.visual_prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "audio-file",
+              "name": "audio_file",
+              "value": "={{ $('Generate Voice').item.json.audio_file }}",
+              "type": "string"
+            },
+            {
+              "id": "video-clips",
+              "name": "clips",
+              "value": "={{ $('Generate Video').item.json.clips }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "merge-data",
+      "name": "Merge Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [1000, 300],
+      "notes": "Combines voice and video data for assembly"
+    },
+    {
+      "parameters": {
+        "url": "https://assembly-service.up.railway.app/assemble-video",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"video_clips\": {{ $json.clips }},\n  \"audio_path\": {{ $json.audio_file }},\n  \"hook\": {{ $json.hook }},\n  \"add_subtitles\": true\n}",
+        "options": {}
+      },
+      "id": "assemble-video",
+      "name": "Assemble Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1250, 300],
+      "notes": "Assembles final video with voice, clips, hook and subtitles"
+    },
+    {
+      "parameters": {
+        "url": "https://tiktok-upload-service.up.railway.app/upload",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"video_path\": {{ $json.final_video }},\n  \"caption\": {{ $json.hook }} + \" #story #shorts #mystical #darkstory\",\n  \"privacy_level\": \"public\"\n}",
+        "options": {}
+      },
+      "id": "post-tiktok",
+      "name": "Post to TikTok",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1500, 300],
+      "notes": "Uploads final video to TikTok with hook as caption"
+    }
+  ],
+  "connections": {
+    "Cron Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate Story",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Story": {
+      "main": [
+        [
+          {
+            "node": "Generate Voice",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Voice": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Video": {
+      "main": [
+        [
+          {
+            "node": "Merge Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Data": {
+      "main": [
+        [
+          {
+            "node": "Assemble Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assemble Video": {
+      "main": [
+        [
+          {
+            "node": "Post to TikTok",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2026-01-13T00:00:00.000Z",
+      "updatedAt": "2026-01-13T00:00:00.000Z",
+      "id": "tiktok-automation",
+      "name": "TikTok Automation"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-13T00:00:00.000Z",
+  "versionId": "1.0.0"
+}
