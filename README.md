@@ -12,6 +12,18 @@ This project provides a minimal configuration to deploy n8n on Railway with:
 - Secure configuration with environment variables
 - HTTPS support via Railway's automatic SSL
 
+### 💚 Free & Open Source Focus
+
+This project prioritizes **100% free and open source tools** for content generation:
+
+- ✅ **Coqui TTS** - Free voice generation
+- ✅ **ComfyUI + AnimateDiff** - Free video generation  
+- ✅ **Ollama (Optional)** - Free local LLM for stories
+- ✅ **Reddit API** - Free story seeds
+- ✅ **n8n** - Free workflow automation
+
+**Total cost: $0-0.12/month** (see [FREE_SETUP.md](FREE_SETUP.md))
+
 ## Prerequisites
 
 - A Railway account ([railway.app](https://railway.app))
@@ -23,8 +35,9 @@ This project provides a minimal configuration to deploy n8n on Railway with:
 n8n-railway/
 ├── Dockerfile              # Minimal Dockerfile using official n8n image
 ├── env.example             # Template with all required environment variables
-├── config.example.py       # Config template with all settings
+├── config.example.py       # Config template with all settings (prioritizes FREE tools)
 ├── CONFIG_GUIDE.md         # Quick setup guide for config.py
+├── FREE_SETUP.md           # 💚 Guide for 100% free/open source setup
 ├── CREDENTIALS.md          # Complete API keys and credentials setup guide
 ├── README.md               # This file
 └── workflows/              # Pre-built n8n workflows
